@@ -22,3 +22,11 @@ function minCostRopes(ropes) {
 
     return totalCost;
 }
+const ropes1 = [4, 3, 2, 6];
+console.log(minCostRopes(ropes1)); // Output: 29
+
+const ropes2 = [4, 2, 7, 6, 9];
+console.log(minCostRopes(ropes2)); // Output: 62
+
+const ropes3 = [10];
+console.log(minCostRopes(ropes3)); // Output: 0
