@@ -1,7 +1,69 @@
-function minCostRopes(ropes) {
-    if (ropes.length <= 1) {
-        return 0; // No cost if 0 or 1 rope
+class MinHeap {
+    constructor() {
+        this.heap = [];
     }
+
+    insert(val) {
+        this.heap.push(val);
+        this.bubbleUp();
+    }
+
+    bubbleUp() {
+        let index = this.heap.length - 1;
+
+        while (index > 0) {
+            let parent = Math.floor((index - 1) / 2);
+
+            if (this.heap[parent] <= this.heap[index]) break;
+
+            // Swap
+            [this.heap[parent], this.heap[index]] = [this.heap[index], this.heap[parent]];
+            index = parent;
+        }
+    }
+
+    extractMin() {
+        if (this.heap.length === 0) return null;
+        if (this.heap.length === 1) return this.heap.pop();
+
+        const min = this.heap[0];
+        this.heap[0] = this.heap.pop();
+        this.bubbleDown();
+        return min;
+    }
+
+    bubbleDown() {
+        let index = 0;
+        const length = this.heap.length;
+
+        while (true) {
+            let left = 2 * index + 1;
+            let right = 2 * index + 2;
+            let smallest = index;
+
+            if (left < length && this.heap[left] < this.heap[smallest]) {
+                smallest = left;
+            }
+            if (right < length && this.heap[right] < this.heap[smallest]) {
+                smallest = right;
+            }
+
+            if (smallest === index) break;
+
+            // Swap
+            [this.heap[index], this.heap[smallest]] = [this.heap[smallest], this.heap[index]];
+            index = smallest;
+        }
+    }
+
+    size() {
+        return this.heap.length;
+    }
+}
+
+// Main function
+function minCostRopes(ropes) {
+    if (ropes.length <= 1) return 0;
 
     const minHeap = new MinHeap();
     for (const rope of ropes) {
@@ -17,16 +79,18 @@ function minCostRopes(ropes) {
         const currentCost = firstMin + secondMin;
         totalCost += currentCost;
 
-        minHeap.insert(currentCost); // Add the new combined rope back to the heap
+        minHeap.insert(currentCost);
     }
 
     return totalCost;
 }
+
+// Test Cases
 const ropes1 = [4, 3, 2, 6];
-console.log(minCostRopes(ropes1)); // Output: 29
+console.log(minCostRopes(ropes1)); // 29
 
 const ropes2 = [4, 2, 7, 6, 9];
-console.log(minCostRopes(ropes2)); // Output: 62
+console.log(minCostRopes(ropes2)); // 62
 
 const ropes3 = [10];
-console.log(minCostRopes(ropes3)); // Output: 0
+console.log(minCostRopes(ropes3)); // 0
